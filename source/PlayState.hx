@@ -67,6 +67,7 @@ class PlayState extends MusicBeatState
 	private var vocals:FlxSound;
 
 	private var dad:Character;
+	private var dad2:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
 
@@ -180,6 +181,8 @@ class PlayState extends MusicBeatState
 
 	var gf_launched:Bool = false;
 
+	var exDad:Bool = false;
+
 	override public function create()
 	{
 		theFunne = FlxG.save.data.newInput;
@@ -246,99 +249,8 @@ class PlayState extends MusicBeatState
 						];
 				//the sides of the faces (1=left, -1=right and flipped)
 				dside = [1, 1, 1, -1, 1, -1, 1, 1];
-			case 'eruption':
-				dialogue = [
-					"Zoinks! I lost control for a second...",
-					"I'm sorry man, don't wanna make it\nunfair for you or anything.",
-					"beep boop", //adequate sentiment bitch. uh i mean let's keep singing bro!!
-					"Okay, like, get ready now and stuff"
-				];
-				dface = [
-						"f_sh",
-						"f_sh",
-						"f_bf",
-						"f_sh_smug"
-						];
-				dside = [1, 1, -1, 1];
-			case 'kaio-ken':
-				dialogue = [
-					"You're like, actually good and stuff",
-					"I don't wanna like bore you, so I'll\nsing faster this time",
-					"beep boop boop bap bee", //yeah like that's gonna make it harder for me. ur too easy man! come up with something... not boring!
-					"...",
-					"Alright, alright...\nHere we go man!",
-				];
-				dface = [
-						"f_sh",
-						"f_sh",
-						"f_bf",
-						"f_sh_ser",
-						"f_sh_smug"
-						];
-				dside = [1, 1, -1, 1, 1];
-			case 'whats-new':
-				dialogue = [
-					"You haven't seen scoob around?",
-					"bap boop",
-					"Oh gosh! I haven't like, found him either!\nHe must be so scared...",
-					"boop bap",
-					"Huh? sing again?", //Did I fuckin stutter? Bring it on bitch, I'm tired of your shit. I didn't even care for your dog.
-					"You know, maybe singing Scooby's\nfavorite song might call his attention\nand stuff",
-					"If he can hear us...",
-					"Alright, here we go."
-				];
-				dface = [
-						"f_sh_ser",
-						"f_bf",
-						"f_sh_con",
-						"f_bf",
-						"f_sh_con",
-						"f_sh_ser",
-						"f_sh_con",
-						"f_sh"
-						];
-				dside = [1, -1, 1, -1, 1, 1, 1, 1];
-			case 'blast':
-				dialogue = [
-					"...",
-					"...",
-					"...",
-					"Scooby's my closest friend y'know",
-					"We've been together for the last 70 years!",
-					"I stopped my aging when I was like 17.",
-					"I didn't do the same to my friends because it\nwould be selfish for me to not let them\nrest and stuff...",
-					"But zoinks! Scooby was so insistent.\nhe told me he'd never regret his decision if\nit meant to spend eternity side by side.",
-					"Now he's the only one I have left...",
-					"beep bee bap!",
-					"...",
-					"I'm uh.. gonna make some noise."
-				];
-				dface = [
-						"f_sh", "f_sh_ser",
-						"f_bf",
-						"f_sh_ser", "f_sh", "f_sh_ser", "f_sh_con", "f_sh_pens", "f_sh_sad",
-						"f_bf",
-						"f_sh_ang", "f_sh_smug"
-						];
-				dside = [1, 1, -1, 1, 1, 1, 1, 1, 1, -1, 1, 1];
-			case 'super-saiyan':
-				dialogue = [
-					"beep boo baa", 
-					"bap bee beep boop bee", 
-					"bap bap bee pop", 
-					"That's like, really rude man...\nI really-",
-					"bee boop",
-					"...",
-					"Heh.",
-					"Prick."
-				];
-				dface = [
-						"f_bf", "n", "n",
-						"f_sh_con",
-						"f_bf",
-						"f_sh_ang", "f_sh_smug", "n"
-						];
-				dside = [-1, -1, -1, 1, -1, 1, 1, 1, 1];
+			case 'final-destination':
+				exDad = true;
 			case 'dadbattle':
 				
 			case 'garden-havoc':
@@ -806,6 +718,11 @@ class PlayState extends MusicBeatState
 
 		dad = new Character(100, 100, SONG.player2);
 
+		if (exDad)
+		{
+			dad2 = new Character(280, 100, "dad");
+		}
+
 		scoob = new Character(9000, 290, 'scooby', false);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
@@ -913,6 +830,7 @@ class PlayState extends MusicBeatState
 		if (curStage == 'limo')
 			add(limo);
 
+		if (exDad) add(dad2);
 		add(dad);
 		add(boyfriend);
 
@@ -1562,6 +1480,7 @@ class PlayState extends MusicBeatState
 		{
 			dad.dance();
 			gf.dance();
+			if (exDad) dad2.dance();
 			boyfriend.playAnim('idle');
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
@@ -1729,6 +1648,7 @@ class PlayState extends MusicBeatState
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
+				swagNote.dType = section.dType;
 
 				var susLength:Float = swagNote.sustainLength;
 
@@ -2514,30 +2434,69 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							switch (Math.abs(daNote.noteData))
+							if (!exDad)
 							{
-								case 0:
-									dad.playAnim('singLEFT' + altAnim, true);
-								case 1:
-									dad.playAnim('singDOWN' + altAnim, true);
-								case 2:
-									dad.playAnim('singUP' + altAnim, true);
-								case 3:
-									dad.playAnim('singRIGHT' + altAnim, true);
-								case 4:
-									dad.playAnim('singUP' + altAnim, true);
-								case 5:
-									dad.playAnim('singLEFT' + altAnim, true);
-								case 6:
-									dad.playAnim('singDOWN' + altAnim, true);
-								case 7:
-									dad.playAnim('singUP' + altAnim, true);
-								case 8:
-									dad.playAnim('singRIGHT' + altAnim, true);
+								switch (Math.abs(daNote.noteData))
+								{
+									case 0:
+										dad.playAnim('singLEFT' + altAnim, true);
+									case 1:
+										dad.playAnim('singDOWN' + altAnim, true);
+									case 2:
+										dad.playAnim('singUP' + altAnim, true);
+									case 3:
+										dad.playAnim('singRIGHT' + altAnim, true);
+									case 4:
+										dad.playAnim('singUP' + altAnim, true);
+									case 5:
+										dad.playAnim('singLEFT' + altAnim, true);
+									case 6:
+										dad.playAnim('singDOWN' + altAnim, true);
+									case 7:
+										dad.playAnim('singUP' + altAnim, true);
+									case 8:
+										dad.playAnim('singRIGHT' + altAnim, true);
+								}
+							}
+							else
+							{
+								var targ:Character = dad;
+								var both:Bool = false;
+								if (daNote.dType == 0) targ = dad2;
+								else if (daNote.dType == 2)
+								{
+									if (daNote.noteData <= 3) targ = dad2;
+									if (daNote.noteData == 4) both = true;
+								}
+
+								switch (Math.abs(daNote.noteData))
+								{
+									case 0:
+										targ.playAnim('singLEFT' + altAnim, true);
+									case 1:
+										targ.playAnim('singDOWN' + altAnim, true);
+									case 2:
+										targ.playAnim('singUP' + altAnim, true);
+									case 3:
+										targ.playAnim('singRIGHT' + altAnim, true);
+									case 4:
+										targ.playAnim('singUP' + altAnim, true);
+
+										if (both) dad2.playAnim('singUP' + altAnim, true);
+									case 5:
+										targ.playAnim('singLEFT' + altAnim, true);
+									case 6:
+										targ.playAnim('singDOWN' + altAnim, true);
+									case 7:
+										targ.playAnim('singUP' + altAnim, true);
+									case 8:
+										targ.playAnim('singRIGHT' + altAnim, true);
+								}
 							}
 						}
 	
 						dad.holdTimer = 0;
+						if (exDad) dad.holdTimer = 0;
 	
 						if (SONG.needsVoices)
 							vocals.volume = 1;
@@ -3863,8 +3822,13 @@ class PlayState extends MusicBeatState
 			// Conductor.changeBPM(SONG.bpm);
 
 			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && SONG.song.toLowerCase() != "garden-havoc")
+			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
 				dad.dance();
+			if (exDad)
+			{
+				//if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && SONG.notes[Math.floor(curStep / 16)].dType != 0)
+					//dad2.dance();
+			}
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);

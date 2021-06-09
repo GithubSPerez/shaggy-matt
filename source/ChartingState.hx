@@ -295,6 +295,7 @@ class ChartingState extends MusicBeatState
 	var check_mustHitSection:FlxUICheckBox;
 	var check_changeBPM:FlxUICheckBox;
 	var stepperSectionBPM:FlxUINumericStepper;
+	var stepperDType:FlxUINumericStepper;
 	var check_altAnim:FlxUICheckBox;
 
 	function addSectionUI():Void
@@ -309,6 +310,10 @@ class ChartingState extends MusicBeatState
 		stepperSectionBPM = new FlxUINumericStepper(10, 80, 1, Conductor.bpm, 0, 999, 0);
 		stepperSectionBPM.value = Conductor.bpm;
 		stepperSectionBPM.name = 'section_bpm';
+
+		stepperDType = new FlxUINumericStepper(10, 230, 1, 0, 0, 9, 0);
+		stepperDType.value = 0;
+		stepperDType.name = 'quien canta';
 
 		var stepperCopy:FlxUINumericStepper = new FlxUINumericStepper(110, 130, 1, 1, -999, 999, 0);
 
@@ -345,6 +350,7 @@ class ChartingState extends MusicBeatState
 
 		tab_group_section.add(stepperLength);
 		tab_group_section.add(stepperSectionBPM);
+		tab_group_section.add(stepperDType);
 		tab_group_section.add(stepperCopy);
 		tab_group_section.add(check_mustHitSection);
 		tab_group_section.add(check_altAnim);
@@ -469,6 +475,11 @@ class ChartingState extends MusicBeatState
 			else if (wname == 'section_bpm')
 			{
 				_song.notes[curSection].bpm = Std.int(nums.value);
+				updateGrid();
+			}
+			else if (wname == 'quien canta')
+			{
+				_song.notes[curSection].dType = Std.int(nums.value);
 				updateGrid();
 			}
 		}
@@ -851,6 +862,7 @@ class ChartingState extends MusicBeatState
 		check_altAnim.checked = sec.altAnim;
 		check_changeBPM.checked = sec.changeBPM;
 		stepperSectionBPM.value = sec.bpm;
+		stepperDType.value = sec.dType;
 
 		updateHeads();
 	}
@@ -957,7 +969,8 @@ class ChartingState extends MusicBeatState
 			mustHitSection: true,
 			sectionNotes: [],
 			typeOfSection: 0,
-			altAnim: false
+			altAnim: false,
+			dType: 0
 		};
 
 		_song.notes.push(sec);
