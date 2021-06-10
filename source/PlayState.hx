@@ -2496,7 +2496,7 @@ class PlayState extends MusicBeatState
 						}
 	
 						dad.holdTimer = 0;
-						if (exDad) dad.holdTimer = 0;
+						if (exDad) dad2.holdTimer = 0;
 	
 						if (SONG.needsVoices)
 							vocals.volume = 1;
@@ -3827,7 +3827,7 @@ class PlayState extends MusicBeatState
 			if (exDad)
 			{
 				//if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && SONG.notes[Math.floor(curStep / 16)].dType != 0)
-					//dad2.dance();
+					dad2.dance();
 			}
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
