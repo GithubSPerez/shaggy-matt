@@ -121,8 +121,8 @@ class PlayState extends MusicBeatState
 	var sh_r:Float = 600;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
-	var dface:Array<String>;
-	var dside:Array<Int>;
+	var dface:Array<String> = ['f_bf'];
+	var dside:Array<Int> = [1];
 
 	var halloweenBG:FlxSprite;
 	var isHalloween:Bool = false;
@@ -183,6 +183,11 @@ class PlayState extends MusicBeatState
 
 	var exDad:Bool = false;
 
+	var shadow1:FlxSprite;
+	var shadow2:FlxSprite;
+
+	var shadowShow = false;
+
 	override public function create()
 	{
 		theFunne = FlxG.save.data.newInput;
@@ -226,31 +231,102 @@ class PlayState extends MusicBeatState
 		{
 			case 'tutorial':
 				dialogue = ["Hey you're pretty cute.", 'suck my clit or you die.'];
-			case 'where-are-you':
+			case 'place':
 				//the text to appear;
 				dialogue = [
-					"Hey you guys",
-					"I'm looking for a dog that got lost\nin this mansion",
-					"His name is scooby, have you like seen him\nor anything?",
-					"beep bap boop", //na man, haven't seen any dog. Hey are u good at singing? we came here for a battle.
-					"You wanna like, sing?\nBut I haven't found scoobs yet",
-					"bop bee bap", //This house is a mess, there ain't nothing u can do but sing! I hope yo dog isn't fuckin dead tho
-					"I sure hope so too...",
-					"Alright, just a couple of songs though, I\ndon't know that many"
+					"Hey.",
+					"I've come to this mansion to accept your\ntraining.",
+					"Sure thing man!",
+					"So, how will we train?",
+					"I'll channel some power through a regular\nsong battle.",
+					"Won't feel any different from singing\nnormally as power cannalization has\nno feeling.",
+					"...",
+					"I just wanna beat that kid. will this\nhelp me do that?", //This house is a mess, there ain't nothing u can do but sing! I hope yo dog isn't fuckin dead tho
+					"This will give you more control over \nvoice-direction correlation",
+					"I can sense that you've got great singing\nspeed already.",
+					"With this you'll be like, unstoppable!",
+					"Heh",
+					"Let's do this!"
 				];
 				//the sprites to go along with text (n for no change)
 				dface = [
-						"f_sh_ser", "n", "n",
-						"f_bf",
-						"f_sh_con",
-						"f_bf",
-						"f_sh_ser",
-						"f_sh_smug"
+						"f_matt", "n",
+						"f_sh",
+						"f_matt",
+						"f_sh_smug", "f_sh",
+						"f_matt", "f_matt_down",
+						"f_sh_ser", "f_sh", "f_sh_smug",
+						"f_matt", "f_matt_up"
 						];
 				//the sides of the faces (1=left, -1=right and flipped)
-				dside = [1, 1, 1, -1, 1, -1, 1, 1];
+				dside = [-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1];
+			case 'revenge':
+				//the text to appear;
+				dialogue = [
+					"Hello again punk",
+					"Remember me?",
+					"beep boop",
+					"Now you'll see how it feels",
+					"There's no way you can win this time.",
+					"bap",
+					"Oh you funkin' bet!"
+				];
+				//the sprites to go along with text (n for no change)
+				dface = [
+						"f_matt_down", "n",
+						"f_bf",
+						"f_matt_ang", "f_matt_down",
+						"f_bf_burn",
+						"f_matt_up"
+						];
+				//the sides of the faces (1=left, -1=right and flipped)
+				dside = [1, 1, -1, 1, 1, -1, 1];
 			case 'final-destination':
+				//the text to appear;
+				dialogue = [
+					"GOD DAMN IT!!!!",
+					"Hey, like, what's wrong dude?",
+					"I CAN'T! I CAN'T BEAT THIS PIECE\nOF SHIT!!!!!",
+					"That's a bit rude...",
+					"There's no point in getting angry. this guy\nis physically unable to loose",//4
+					"...",
+					"...what?",
+					"'That kid' is boyfriend.",
+					"Every single being\nin this universe that has challenged him\nwas defeated and stuff",
+					"That's because any time he looses a battle\nhe dies.",
+					"!!!",
+					"But death does not mean end to him, every\ntime he dies he is given the choice to\nreset time to a certain state",
+					"That means that from our perspective, there\nis no possible outcome in which the flow\nof time continues after he's defeated",
+					"What the hell",
+					"I've been fighting for nothing?",//14
+					"Your power has increased drastically.\nI wouldn't call that nothing man",
+					"Hey, I'll tell you what.",
+					"We can't beat him but we can sure as\nheck give him a challenge.",
+					"You wanna sing together?",
+					"Yeah man! with my power and your speed,\nhe's bound to have a bad time.",
+					"If that makes you feel better of course...",
+					"You know what? Let's do this!"
+				];
+				//the sprites to go along with text (n for no change)
+				dface = [
+						"f_matt_ang",
+						"f_sh_con",
+						"f_matt_ang",
+						"f_sh_con", "f_sh_ser",
+						"f_matt_down", "n",
+						"f_sh_ser", "n", "n",
+						"f_matt",
+						"f_sh_smug", "f_sh_smug",
+						"f_matt_down", "f_matt_ang",
+						"f_sh_smug", "f_sh", "f_sh_smug",
+						"f_matt",
+						"f_sh_smug", "f_sh_ser",
+						"f_matt_up",
+						];
+				//the sides of the faces (1=left, -1=right and flipped)
+				dside = [1, -1, 1, -1, -1, 1, 1, -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, -1, 1, -1, -1, 1];
 				exDad = true;
+				s_ending = true;
 			case 'dadbattle':
 				
 			case 'garden-havoc':
@@ -567,7 +643,7 @@ class PlayState extends MusicBeatState
 				add(waveSpriteFG);
 			 */
 		}
-		else if (SONG.song.toLowerCase() == 'where-are-you' || SONG.song.toLowerCase() == 'kaio-ken' || SONG.song.toLowerCase() == 'eruption' || SONG.song.toLowerCase() == 'blast' || SONG.song.toLowerCase() == 'whats-new' || SONG.song.toLowerCase() == 'super-saiyan')
+		else if (SONG.song.toLowerCase() == 'place' || SONG.song.toLowerCase() == 'kaio-ken' || SONG.song.toLowerCase() == 'eruption' || SONG.song.toLowerCase() == 'blast' || SONG.song.toLowerCase() == 'whats-new' || SONG.song.toLowerCase() == 'super-saiyan')
 		{
 			//dad.powerup = true;
 			defaultCamZoom = 0.9;
@@ -582,6 +658,36 @@ class PlayState extends MusicBeatState
 			if (SONG.song.toLowerCase() == 'kaio-ken')
 			{
 				var waveEffectBG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 3, 2); //creo que esta weá no hace nada
+			}
+		}
+		else if (SONG.song.toLowerCase() == 'revenge' || SONG.song.toLowerCase() == 'final-destination')
+		{
+			//dad.powerup = true;
+			defaultCamZoom = 0.9;
+			curStage = 'boxing';
+			var bg:FlxSprite = new FlxSprite(-400, -220).loadGraphic(Paths.image('bg_boxn'));
+			bg.antialiasing = true;
+			bg.scrollFactor.set(0.8, 0.8);
+			bg.active = false;
+			add(bg);
+
+			var bg_r:FlxSprite = new FlxSprite(-810, -380).loadGraphic(Paths.image('bg_boxr'));
+			bg_r.antialiasing = true;
+			bg_r.scrollFactor.set(1, 1);
+			bg_r.active = false;
+			add(bg_r);
+
+			if (SONG.song.toLowerCase() == 'final-destination')
+			{
+				shadow1 = new FlxSprite(0, -20).loadGraphic(Paths.image('shadows'));
+				shadow1.scrollFactor.set();
+				shadow1.antialiasing = true;
+				shadow1.alpha = 0;
+
+				shadow2 = new FlxSprite(0, -20).loadGraphic(Paths.image('shadows'));
+				shadow2.scrollFactor.set();
+				shadow2.antialiasing = true;
+				shadow2.alpha = 0;
 			}
 		}
 		else if (SONG.song.toLowerCase() == 'god-eater')
@@ -746,6 +852,9 @@ class PlayState extends MusicBeatState
 				dad.y += 130;
 			case 'dad':
 				camPos.x += 400;
+			case 'matt':
+				dad.y += 320;
+				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 			case 'pico':
 				camPos.x += 600;
 				dad.y += 300;
@@ -804,9 +913,13 @@ class PlayState extends MusicBeatState
 				gf.x += 180;
 				gf.y += 300;
 			case 'stage_2':
-				//
+				gf.alpha = 0;
+				boyfriend.y -= 20;
 			case 'sky':
 				//
+			case 'boxing':
+				gf.x += 70;
+				boyfriend.x += 130;
 		}
 
 		add(gf);
@@ -925,7 +1038,9 @@ class PlayState extends MusicBeatState
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new HealthIcon(SONG.player2, false);
+		var icnChar = SONG.player2;
+		if (exDad) icnChar = 'both';
+		iconP2 = new HealthIcon(icnChar, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
@@ -952,8 +1067,16 @@ class PlayState extends MusicBeatState
 				case "tutorial":
 					startCountdown();
 					FlxG.camera.zoom = 1;
-				case "where-are-you" | "whats-new":
-					schoolIntro(1);
+				case "where-are-you" | "place":
+					if (!Main.skipDes)
+					{
+						schoolIntro(1);
+						Main.skipDes = true;
+					}
+					else
+					{
+						startCountdown();
+					}
 				case "super-saiyan":
 					//FlxG.sound.music.onComplete = ssCutscene;
 					schoolIntro(0);
@@ -986,7 +1109,15 @@ class PlayState extends MusicBeatState
 						});
 					}
 				default:
-					schoolIntro(0);
+					if (!Main.skipDes)
+					{
+						schoolIntro(0);
+						Main.skipDes = true;
+					}
+					else
+					{
+						startCountdown();
+					}
 			}
 		}
 		else
@@ -1072,6 +1203,12 @@ class PlayState extends MusicBeatState
 		dim.scrollFactor.set();
 		add(dim);
 
+		if (SONG.song.toLowerCase() == 'final-destination')
+		{
+			add(shadow1);
+			add(shadow2);
+		}
+
 		if (black.alpha == 1)
 		{
 			dropText = new FlxText(140, tb_y + 25, 2000, "", 32);
@@ -1139,7 +1276,7 @@ class PlayState extends MusicBeatState
 						var newtxt = dialogue[curr_dial].substr(0, curr_char);
 						if (curr_char <= dialogue[curr_dial].length && tb_appear == 1)
 						{
-							if (dside[curr_dial] == 1)
+							if (dside[curr_dial] == 1 || curSong.toLowerCase() != "revenge")
 							{
 								FlxG.sound.play(Paths.sound('pixelText'));
 							}
@@ -1178,10 +1315,6 @@ class PlayState extends MusicBeatState
 				new FlxTimer().start(0.001, function(prs:FlxTimer)
 				{
 					var skip:Bool = false;
-					if (dialogue[curr_dial] == "Why are you saying that" && curr_char >= 16)
-					{
-						skip = true;
-					}
 					if (FlxG.keys.justReleased.ANY || skip)
 					{
 						if ((curr_char <= dialogue[curr_dial].length) && !skip)
@@ -1192,6 +1325,22 @@ class PlayState extends MusicBeatState
 						{
 							curr_char = 0;
 							curr_dial ++;
+
+							if (curSong.toLowerCase() == "final-destination" && !startedCountdown)
+							{
+								switch (curr_dial)
+								{
+									case 4:
+										FlxG.sound.playMusic(Paths.music('expo'), 0);
+										FlxG.sound.music.fadeIn(2, 0, 0.8);
+									case 8:
+										shadowShow = true;
+									case 12:
+										shadowShow = false;
+									case 15:
+										FlxG.sound.music.fadeOut(3, 0);
+								}
+							}
 							if (curr_dial >= dialogue.length)
 							{
 								if (cs_reset)
@@ -1205,14 +1354,14 @@ class PlayState extends MusicBeatState
 								}
 								else
 								{
-									if (curSong.toLowerCase() != "kaio-ken" && curSong.toLowerCase() != "blast")
+									if (curSong.toLowerCase() != "final-destination")
 									{
 										startCountdown();
 									}
 									else
 									{
-										cutTime = 0;
-										superShaggy();
+										if (!startedCountdown) startCountdown();
+										else endSong();
 									}
 								}
 								talk = 0;
@@ -1957,6 +2106,25 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play('bf-old');
 		}
 
+		if (SONG.song.toLowerCase() == 'final-destination')
+		{
+			shadow1.x -= 0.3;
+			if (shadow1.x < -shadow1.width) shadow1.x += shadow1.width;
+			shadow2.x = shadow1.x + shadow2.width;
+
+			if (shadowShow)
+			{
+				shadow1.alpha += 0.002;
+			}
+			else
+			{
+				shadow1.alpha -= 0.002;
+			}
+			if (shadow1.alpha < 0) shadow1.alpha = 0;
+			if (shadow1.alpha > 0.5) shadow1.alpha = 0.5;
+			shadow2.alpha = shadow1.alpha;
+		}
+
 		switch (curStage)
 		{
 			case 'philly':
@@ -2209,6 +2377,12 @@ class PlayState extends MusicBeatState
 					case 'dad':
 						camFollow.y = dad.getMidpoint().y - 100;
 						camFollow.x = dad.getMidpoint().x - 100;
+					case 'matt':
+						if (exDad)
+						{
+							camFollow.y = dad.getMidpoint().y - 200;
+							camFollow.x = dad.getMidpoint().x + 300;
+						}
 					case 'pshaggy':
 						camFollow.y = dad.getMidpoint().y + 0;
 						camFollow.x = dad.getMidpoint().x + 100;
@@ -2603,7 +2777,7 @@ class PlayState extends MusicBeatState
 					transIn = FlxTransitionableState.defaultTransIn;
 					transOut = FlxTransitionableState.defaultTransOut;
 
-					FlxG.switchState(new StoryMenuState());
+					FlxG.switchState(new MainMenuState());
 
 					// if ()
 					StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
@@ -2648,6 +2822,7 @@ class PlayState extends MusicBeatState
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 					FlxG.sound.music.stop();
 
+					Main.skipDes = false;
 					LoadingState.loadAndSwitchState(new PlayState());
 				}
 			}
@@ -2671,6 +2846,9 @@ class PlayState extends MusicBeatState
 							FlxG.save.flush();
 						}
 						finalCutscene();
+					case ('final-destination'):
+						csDial('end');
+						schoolIntro(0);
 				}
 			}
 		}
@@ -3630,7 +3808,7 @@ class PlayState extends MusicBeatState
 							mashing++;
 					}
 
-					if ((mashing <= getKeyPresses(note)) || !theFunne || !FlxG.save.data.mash_punish)
+					if (true)
 						goodNoteHit(note);
 					else
 					{
@@ -3822,12 +4000,11 @@ class PlayState extends MusicBeatState
 			// Conductor.changeBPM(SONG.bpm);
 
 			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
+			if (dad.animation.curAnim.name.startsWith("idle") || SONG.notes[Math.floor(curStep / 16)].mustHitSection)
 				dad.dance();
 			if (exDad)
 			{
-				//if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && SONG.notes[Math.floor(curStep / 16)].dType != 0)
-					dad2.dance();
+				dad2.dance();
 			}
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
@@ -4379,17 +4556,28 @@ class PlayState extends MusicBeatState
 	{
 		switch (csIndex)
 		{
-			case 'found_scooby':
+			case 'end':
 				dialogue = [
-					"Scooby!! where were you?!",
-					"I don't know shraggy, this mansion\nis really big!",
-					"I think I even sawr a monster, tho\nI don't remember wh..."
+					"Man...",
+					"Stop like, thinking about it.",
+					"We just have to accept it.",
+					"Yeah but",
+					"What would've happened if he\ngave up?",
+					"What?",
+					"Like, if he dies and decides to not\nrevert time...",
+					"What would happen to us?",
+					"...",
+					"..."
 				];
 				dface = [
-						"f_sh_happy",
-						"f_scb", "n"
+						"f_matt",
+						"f_sh", "f_sh",
+						"f_matt", "f_matt_down",
+						"f_sh_smug",
+						"f_matt_down", "f_matt_ang",
+						"f_sh", "f_sh_kill"
 						];
-				dside = [1, -1, -1];
+				dside = [1, -1, -1, 1, 1, -1, 1, 1, -1, -1];
 			case 'scooby_hold_talk':
 				dialogue = [
 					"Like, what's wrong scoob?",

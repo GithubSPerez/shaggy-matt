@@ -155,12 +155,14 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		add(bg);
 
-		logoBl = new FlxSprite(-150, -100);
+		logoBl = new FlxSprite(-150, -40);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = true;
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logoBl.animation.addByPrefix('bump', 'logo bumpin', 0);
 		logoBl.animation.play('bump');
+		logoBl.setGraphicSize(Std.int(logoBl.frameWidth * 0.9));
 		logoBl.updateHitbox();
+		logoBl.screenCenter(X);
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
 
@@ -169,17 +171,17 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = true;
+		gfDance.alpha = 0;
 		add(gfDance);
 		add(logoBl);
 
-		titleText = new FlxSprite(100, FlxG.height * 0.8);
+		titleText = new FlxSprite(150, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
 		titleText.antialiasing = true;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
-		// titleText.screenCenter(X);
 		add(titleText);
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
@@ -383,50 +385,14 @@ class TitleState extends MusicBeatState
 
 		switch (curBeat)
 		{
-            case 1:
-                
-            case 2:
-                createCoolText(['Mod by']);
-            // credTextShit.visible = true;
             case 3:
-                addMoreText('perez');
-            case 4:
+            	createCoolText(['Mod by', 'perez', 'sulayre', 'theonlyvolume']);
+            case 10:
             	deleteCoolText();
-            case 5:
                 createCoolText(["Using Kade dev engine"]);
-            case 7:
-                addMoreText('Forever');
-                ngSpr.visible = false;
-            // credTextShit.text += '\nNewgrounds';
-            case 8:
-                deleteCoolText();
-                ngSpr.visible = false;
-            // credTextShit.visible = false;
-
-            // credTextShit.text = 'Shoutouts Tom Fulp';
-            // credTextShit.screenCenter();
-            case 9:
-                createCoolText(['go play']);
+            case 17:
+            	skipIntro();
             // credTextShit.visible = true;
-            case 11:
-                addMoreText('funkin fanworks');
-            // credTextShit.text += '\nlmao';
-            case 12:
-                deleteCoolText();
-                addMoreText('Friday');
-            // credTextShit.visible = false;
-            // credTextShit.text = "Friday";
-            // credTextShit.screenCenter();
-            case 13:
-                addMoreText('Night');
-            // credTextShit.visible = true;
-            case 14:
-                addMoreText('Funkin');
-            // credTextShit.text += '\nNight';
-            case 15:
-                addMoreText('Vs. Shaggy'); // credTextShit.text += '\nFunkin';
-            case 16:
-                skipIntro();
         }
 	}
 
@@ -436,9 +402,10 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
+			FlxG.sound.play(Paths.sound('titleHorn'));
 			remove(ngSpr);
 
-			FlxG.camera.flash(FlxColor.WHITE, 4);
+			FlxG.camera.flash(FlxColor.BLACK, 4);
 			remove(credGroup);
 			skippedIntro = true;
 		}

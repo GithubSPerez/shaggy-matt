@@ -15,29 +15,27 @@ import lime.net.curl.CURLCode;
 
 using StringTools;
 
+//---------------------------------------
+//THIS HOLE THING IS OBSOLETE
+//---------------------------------------
+
 class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
 
 	var weekData:Array<Dynamic> = [
-		['Where-are-you', 'Eruption', 'Kaio-ken'],
-		['Whats-new', 'Blast', 'Super-saiyan'],
-		['GOD-EATER']
+		['Place', 'Revenge', 'Final-destination']
 	];
 	var curDifficulty:Int = 2;
 
 	public static var weekUnlocked:Array<Bool> = [true, true, false, false];
 
 	var weekCharacters:Array<Dynamic> = [
-		['dad', 'bf', 'gf'],
-		['dad', 'bf', 'gf'],
-		['noone', 'bf', 'gf']
+		['dad', 'bf', 'gf']
 	];
 
 	var weekNames:Array<String> = [
-		"Less than 0.001%",
-		"Up to 0.001%",
-		"???%"
+		"An unstoppable force + an unmovable object",
 	];
 
 	var txtWeekTitle:FlxText;
@@ -87,6 +85,7 @@ class StoryMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
+		/*
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		scoreText.setFormat("VCR OSD Mono", 32);
 
@@ -232,11 +231,14 @@ class StoryMenuState extends MusicBeatState
 		{
 			changeWeek(2);
 		}
+		*/
+		selectWeek();
 	}
 
 	override function update(elapsed:Float)
 	{
 		Main.skipDes = false;
+		/*
 		//sprDifficulty.alpha = 0;
 		//curDifficulty = 2;
 		// scoreText.setFormat('VCR OSD Mono', 32);
@@ -313,7 +315,7 @@ class StoryMenuState extends MusicBeatState
 			movedBack = true;
 			FlxG.switchState(new MainMenuState());
 		}
-
+		*/
 		super.update(elapsed);
 	}
 
@@ -325,38 +327,20 @@ class StoryMenuState extends MusicBeatState
 	{
 		if (weekUnlocked[curWeek])
 		{
-			if (stopspamming == false)
-			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-
-				grpWeekText.members[curWeek].startFlashing();
-				grpWeekCharacters.members[1].animation.play('bfConfirm');
-				stopspamming = true;
-			}
-
 			PlayState.storyPlaylist = weekData[curWeek];
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 
 			var diffic = "";
 
-			switch (curDifficulty)
-			{
-				case 0:
-					diffic = '-easy';
-				case 2:
-					diffic = '-hard';
-			}
+			if (Main.diff == 1) diffic = '-hard';
 
-			PlayState.storyDifficulty = curDifficulty;
+			PlayState.storyDifficulty = Main.diff + 1;
 
 			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.storyWeek = curWeek;
 			PlayState.campaignScore = 0;
-			new FlxTimer().start(1, function(tmr:FlxTimer)
-			{
-				LoadingState.loadAndSwitchState(new PlayState(), true);
-			});
+			LoadingState.loadAndSwitchState(new PlayState(), true);
 		}
 	}
 

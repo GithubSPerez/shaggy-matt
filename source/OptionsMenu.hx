@@ -24,6 +24,9 @@ class OptionsMenu extends MusicBeatState
 
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	var versionShit:FlxText;
+
+	var gear1:FlxSprite;
+	var gear2:FlxSprite;
 	override function create()
 	{
 		/*
@@ -33,17 +36,24 @@ class OptionsMenu extends MusicBeatState
 		FlxG.save.flush();
 		*/
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolStringFile(inputStr[FlxG.save.data.dfjk] + "\n" + (FlxG.save.data.newInput ? "Virgin input easy" : "Chad input normal") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (!FlxG.save.data.accuracyDisplay ? "off" : "on") + "\n" + (FlxG.save.data.mash_punish ? 'Anti-Mash on' : 'Anti-Mash off'));
+		gear1 = new FlxSprite(-230, -230).loadGraphic(Paths.image('optGear'));
+		gear2 = new FlxSprite(FlxG.width - 230, FlxG.height - 400).loadGraphic(Paths.image('optGear'));
+		var menuCol:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuColor'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBG'));
+		controlsStrings = CoolUtil.coolStringFile(inputStr[FlxG.save.data.dfjk] + "\n" + (FlxG.save.data.newInput ? "Virgin input" : "Chad input") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (!FlxG.save.data.accuracyDisplay ? "off" : "on"));
 		
 		trace(controlsStrings);
 
-		menuBG.color = 0xFFea71fd;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 
+		gear1.updateHitbox();
+		gear2.updateHitbox();
+
+		add(menuCol);
+		add(gear1);
+		add(gear2);
 		add(menuBG);
 
 		grpControls = new FlxTypedGroup<Alphabet>();
@@ -71,6 +81,8 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		gear1.angle -= 0.1;
+		gear2.angle += 0.08;
 			if (controls.BACK)
 				FlxG.switchState(new MainMenuState());
 			if (controls.UP_P)
@@ -103,7 +115,7 @@ class OptionsMenu extends MusicBeatState
 
 					if (!FlxG.save.data.newInput)
 					{
-						infoTxt = "Not cringe B)";
+						infoTxt = "Impossible";
 					}
 
 					info = new FlxText(108, FlxG.height - 290, 0, infoTxt, 20);
@@ -146,7 +158,7 @@ class OptionsMenu extends MusicBeatState
 						
 					case 1:
 						FlxG.save.data.newInput = !FlxG.save.data.newInput;
-						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.newInput ? "Virgin input easy" : "Chad input normal"), true, false);
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.newInput ? "Virgin input" : "Chad input"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 1;
 						grpControls.add(ctrl);
@@ -161,12 +173,6 @@ class OptionsMenu extends MusicBeatState
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Accuracy " + (!FlxG.save.data.accuracyDisplay ? "off" : "on"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
-						grpControls.add(ctrl);
-					case 4:
-						FlxG.save.data.mash_punish = !FlxG.save.data.mash_punish;
-						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.mash_punish ? "Anti-Mash on" : "Anti-Mash off"), true, false);
-						ctrl.isMenuItem = true;
-						ctrl.targetY = curSelected - 4;
 						grpControls.add(ctrl);
 				}
 				FlxG.save.flush();

@@ -22,6 +22,7 @@ class Main extends Sprite
 	public static var woops:Bool = false;
 	public static var skipDes:Bool = false;
 	public static var drums:Bool = false;
+	public static var diff = 1;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 

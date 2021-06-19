@@ -56,13 +56,15 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-			addWeek(['Revenge', 'Final-destination'], 1, ['dad', 'dad']);
+			addWeek(['Place', 'Revenge', 'Final-destination'], 1, ['dad', 'matt', 'both']);
 
 		// LOAD MUSIC
 
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		var menuCol:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuColor'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBG'));
+		add(menuCol);
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -232,7 +234,7 @@ class FreeplayState extends MusicBeatState
 			case 1:
 				diffText.text = '< EASY >';
 			case 2:
-				diffText.text = "< CANON >";
+				diffText.text = "< HARD >";
 		}
 	}
 

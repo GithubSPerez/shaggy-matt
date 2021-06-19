@@ -215,6 +215,23 @@ class Character extends FlxSprite
 				addOffset("singDOWN", 60, -100);
 
 				playAnim('idle', true);
+			case 'matt':
+				tex = Paths.getSparrowAtlas('matt');
+				frames = tex;
+
+				animation.addByPrefix('idle', "matt idle", 24, false);
+				animation.addByPrefix('singUP', "matt up note", 24, false);
+				animation.addByPrefix('singDOWN', "matt down note", 24, false);
+				animation.addByPrefix('singLEFT', 'matt left note', 24, false);
+				animation.addByPrefix('singRIGHT', 'matt right note', 24, false);
+
+				addOffset('idle');
+				addOffset("singUP", -41, 21);
+				addOffset("singRIGHT", -10, -14);
+				addOffset("singLEFT", 63, -24);
+				addOffset("singDOWN", -62, -19);
+
+				playAnim('idle');
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('spooky_kids_assets');
 				frames = tex;

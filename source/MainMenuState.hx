@@ -37,9 +37,14 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+	var bgch:FlxSprite;
+	var diff = 1;
+	var infoTxt:Array<String> = ['EASY', 'HARD'];
+	var info:FlxText;
 
 	override function create()
 	{
+		Main.skipDes = false;
 		if (!FlxG.sound.music.playing)
 		{
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
@@ -47,10 +52,29 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
+		var bgcol:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuColor'));
+		bgcol.scrollFactor.x = 0;
+		bgcol.scrollFactor.y = 0;
+		//bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bgcol.updateHitbox();
+		bgcol.screenCenter();
+		add(bgcol);
+
+		bgch = new FlxSprite(-80).loadGraphic(Paths.image('menuChars'));
+		bgch.scrollFactor.x = 0;
+		bgch.scrollFactor.y = 0;
+		//bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bgch.updateHitbox();
+		bgch.screenCenter();
+		bgch.y += 500;
+		bgch.angle = 180 + 45;
+		bgch.antialiasing = true;
+		add(bgch);
+
 		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.scrollFactor.y = 0;
+		//bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
@@ -70,6 +94,12 @@ class MainMenuState extends MusicBeatState
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		// magenta.scrollFactor.set();
+
+		info = new FlxText(0, 15, 0, infoTxt[diff], 20);
+		info.scrollFactor.set();
+		info.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		info.screenCenter(X);
+		add(info);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
@@ -141,6 +171,15 @@ class MainMenuState extends MusicBeatState
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
+		bgch.angle -= 0.05;
+
+		if (controls.RIGHT_P) diff ++;
+		if (controls.LEFT_P) diff --;
+		if (diff < 0) diff = 1;
+		if (diff > 1) diff = 0;
+
+		Main.diff = diff;
+		info.text = '<' + infoTxt[diff] + '>';
 
 		if (!selectedSomethin)
 		{
@@ -176,7 +215,7 @@ class MainMenuState extends MusicBeatState
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
-					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+					//FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
 					menuItems.forEach(function(spr:FlxSprite)
 					{
