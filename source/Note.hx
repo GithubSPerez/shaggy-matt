@@ -27,6 +27,7 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 	public var mania:Int = 0;
+	public var noteType:Int = 0;
 
 	public static var noteyOff1:Array<Float> = [4, 0, 0, 0, 0, 0];
 	public static var noteyOff2:Array<Float> = [0, 0, 0, 0, 0, 0];
@@ -78,7 +79,9 @@ class Note extends FlxSprite
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 
-		this.noteData = noteData;
+		var t = Std.int(noteData / Main.dataJump[mania]);
+		this.noteType = t;
+		this.noteData = noteData % Main.keyAmmo[mania];
 
 		var addto = FlxG.save.data.offset;
 		if (Main.editor) //xd
@@ -151,23 +154,29 @@ class Note extends FlxSprite
 				animation.addByPrefix('blackhold', 'black hold piece');
 				animation.addByPrefix('darkhold', 'dark hold piece');
 
+				animation.addByPrefix('kill', 'kill');
+				animation.addByPrefix('live', 'live');
+
 				setGraphicSize(Std.int(width * noteScale));
 				updateHitbox();
 				antialiasing = true;
 		}
 
-		switch (noteData)
-		{
-			case 0:
-			//nada
-		}
 		var frameN:Array<String> = ['purple', 'blue', 'green', 'red'];
 		if (mania == 1) frameN = ['purple', 'green', 'red', 'yellow', 'blue', 'dark'];
 		else if (mania == 2) frameN = ['purple', 'blue', 'green', 'red', 'white', 'yellow', 'violet', 'black', 'dark'];
 
-		x += swagWidth * noteData;
-		animation.play(frameN[noteData] + 'Scroll');
+		x += swagWidth * (noteData % Main.keyAmmo[mania]);
+		animation.play(frameN[noteData % Main.keyAmmo[mania]] + 'Scroll');
 		// trace(prevNote);
+
+		switch (t)
+		{
+			case 1:
+				animation.play('kill');
+			case 2:
+				animation.play('live');
+		}
 
 		if (isSustainNote && prevNote != null)
 		{

@@ -86,6 +86,8 @@ class ChartingState extends MusicBeatState
 	var rightIcon:HealthIcon;
 	var keyAmmo:Array<Int> = [4, 6, 9];
 
+	var currType:Int = 0;
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -297,6 +299,10 @@ class ChartingState extends MusicBeatState
 	var stepperSectionBPM:FlxUINumericStepper;
 	var stepperDType:FlxUINumericStepper;
 	var check_altAnim:FlxUICheckBox;
+	var stepperType:FlxUINumericStepper;
+
+	var typeNameTxt:FlxText;
+	var typeNames:Array<String> = ['Normal', 'Tricky', 'HD'];
 
 	function addSectionUI():Void
 	{
@@ -315,6 +321,18 @@ class ChartingState extends MusicBeatState
 		stepperDType.value = 0;
 		stepperDType.name = 'quien canta';
 
+		var tx = 0;
+		var ty = 400;
+		var stepperType:FlxUINumericStepper = new FlxUINumericStepper(tx, ty, 1, currType, 0, typeNames.length - 1, 0);
+		stepperType.value = currType;
+		stepperType.name = 'note_type';
+		stepperType.scrollFactor.set();
+
+		typeNameTxt = new FlxText(tx, ty + 20, 0, 'Normal notes', 12);
+		typeNameTxt.scrollFactor.set();
+		typeNameTxt.color = 0xFFFFFFFF;
+		add(typeNameTxt);
+
 		var stepperCopy:FlxUINumericStepper = new FlxUINumericStepper(110, 130, 1, 1, -999, 999, 0);
 
 		var copyButton:FlxButton = new FlxButton(10, 130, "Copy last section", function()
@@ -331,7 +349,8 @@ class ChartingState extends MusicBeatState
 				var note = _song.notes[curSection].sectionNotes[i];
 
 				var half = keyAmmo[_song.mania];
-				note[1] = (note[1] + half) % (half * 2);
+				var nT = Math.floor(note[1] / (half * 2));
+				note[1] = (note[1] + half) % (half * 2) + nT * (half * 2);
 				_song.notes[curSection].sectionNotes[i] = note;
 				updateGrid();
 			}
@@ -358,6 +377,7 @@ class ChartingState extends MusicBeatState
 		tab_group_section.add(copyButton);
 		tab_group_section.add(clearSectionButton);
 		tab_group_section.add(swapSection);
+		add(stepperType);
 
 		UI_box.addGroup(tab_group_section);
 	}
@@ -481,6 +501,12 @@ class ChartingState extends MusicBeatState
 			{
 				_song.notes[curSection].dType = Std.int(nums.value);
 				updateGrid();
+			}
+			else if (wname == 'note_type')
+			{
+				currType = Std.int(nums.value);
+				typeNameTxt.text = typeNames[currType] + ' notes';
+				//updateGrid();
 			}
 		}
 
@@ -936,18 +962,12 @@ class ChartingState extends MusicBeatState
 			var daStrumTime = i[0];
 			var daSus = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % (keyAmmo[_song.mania]));
+			var note:Note = new Note(daStrumTime, daNoteInfo);
 			note.sustainLength = daSus;
-			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
+			note.setGraphicSize(GRID_SIZE);
 			note.updateHitbox();
-			note.x = Math.floor(daNoteInfo * GRID_SIZE);
+			note.x = Math.floor((daNoteInfo % Main.dataJump[_song.mania]) * GRID_SIZE);
 			note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps)));
-
-			if (_song.mania == 2)
-			{
-				note.setGraphicSize(S_GRID_SIZE, GRID_SIZE);
-				note.x = Math.floor(daNoteInfo * S_GRID_SIZE);
-			}
 
 			curRenderedNotes.add(note);
 
@@ -1036,7 +1056,7 @@ class ChartingState extends MusicBeatState
 			var noteData = Math.floor(FlxG.mouse.x / S_GRID_SIZE);
 		}
 
-		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus]);
+		_song.notes[curSection].sectionNotes.push([noteStrum, noteData + keyAmmo[_song.mania] * 2 * currType, noteSus]);
 
 		curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 

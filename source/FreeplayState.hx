@@ -24,6 +24,7 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
+	var wiiCursor:FlxSprite;
 	public static var addedGodEater:Bool = false;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
@@ -33,6 +34,8 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		wiiCursor = new FlxSprite(0, 0).loadGraphic(Paths.image('wii_cursor'));
+		wiiCursor.updateHitbox();
 		/*
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
@@ -137,6 +140,7 @@ class FreeplayState extends MusicBeatState
 		 */
 
 		super.create();
+		add(wiiCursor);
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
@@ -205,6 +209,10 @@ class FreeplayState extends MusicBeatState
 			trace(poop);
 
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+			if (Main.god)
+			{
+				PlayState.SONG = Song.loadFromJson(songs[curSelected].songName.toLowerCase() + '-god', songs[curSelected].songName.toLowerCase());
+			}
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 
@@ -212,6 +220,8 @@ class FreeplayState extends MusicBeatState
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
+		wiiCursor.x = FlxG.mouse.x;
+		wiiCursor.y = FlxG.mouse.y;
 	}
 
 	function changeDiff(change:Int = 0)

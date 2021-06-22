@@ -87,12 +87,18 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		if (song.toLowerCase() == "final-destination" && Main.god)
+		{
+			return 'songs:assets/songs/${song.toLowerCase()}/GodVoice.$SOUND_EXT';
+		}
+		else
+		{
+			return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		}
 	}
 
 	inline static public function inst(song:String)
 	{
-		trace('songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT');
 		if (song.toLowerCase() == "whats-new" && Main.drums)
 		{
 			return 'songs:assets/songs/${song.toLowerCase()}/Fuck.$SOUND_EXT';

@@ -23,6 +23,9 @@ class Main extends Sprite
 	public static var skipDes:Bool = false;
 	public static var drums:Bool = false;
 	public static var diff = 1;
+	public static var keyAmmo:Array<Int> = [4, 6, 9];
+	public static var dataJump:Array<Int> = [8, 12, 18];
+	public static var god:Bool = true;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 

@@ -129,6 +129,8 @@ class Character extends FlxSprite
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
 				tex = Paths.getSparrowAtlas('shaggy');
+				if (Main.god) tex = Paths.getSparrowAtlas('god_shaggy');
+
 				frames = tex;
 				animation.addByPrefix('idle', 'shaggy_idle', 24);
 				animation.addByPrefix('idle2', 'shaggy_idle2', 24);
@@ -167,6 +169,12 @@ class Character extends FlxSprite
 				addOffset("singRIGHT_s", -20, -40);
 				addOffset("singLEFT_s", 100, -120);
 				addOffset("singDOWN_s", 0, -170);
+
+				if (Main.god)
+				{
+					animation.addByPrefix('idle', 'shaggy_idle', 60);
+					animation.addByPrefix('idle2', 'shaggy_idle2', 60);
+				}
 
 				playAnim('idle');
 
@@ -217,19 +225,46 @@ class Character extends FlxSprite
 				playAnim('idle', true);
 			case 'matt':
 				tex = Paths.getSparrowAtlas('matt');
+				if (Main.god) tex = Paths.getSparrowAtlas('god_matt');
+
 				frames = tex;
 
-				animation.addByPrefix('idle', "matt idle", 24, false);
+				animation.addByPrefix('idle', "matt idle", 20, false);
 				animation.addByPrefix('singUP', "matt up note", 24, false);
 				animation.addByPrefix('singDOWN', "matt down note", 24, false);
 				animation.addByPrefix('singLEFT', 'matt left note', 24, false);
 				animation.addByPrefix('singRIGHT', 'matt right note', 24, false);
+
+				animation.addByPrefix('singUPmiss', "miss up", 24, false);
+				animation.addByPrefix('singDOWNmiss', "miss down", 24, false);
+				animation.addByPrefix('singLEFTmiss', 'miss left', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'miss right', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", -41, 21);
 				addOffset("singRIGHT", -10, -14);
 				addOffset("singLEFT", 63, -24);
 				addOffset("singDOWN", -62, -19);
+
+				if (isPlayer)
+				{
+					addOffset("singUP", -21, 21);
+					addOffset("singRIGHT", -40, -14);
+					addOffset("singLEFT", 63, -24);
+					addOffset("singDOWN", -30, -19);
+				}
+				addOffset("singUPmiss", -21, 21);
+				addOffset("singRIGHTmiss", -40, -14);
+				addOffset("singLEFTmiss", 63, -24);
+				addOffset("singDOWNmiss", -15, -28);
+
+				if (Main.god)
+				{
+					addOffset("singUP", -105, 136);
+					addOffset("singRIGHT", -133, -51);
+					addOffset("singLEFT", 86, -23);
+					addOffset("singDOWN", -111, 8);
+				}
 
 				playAnim('idle');
 			case 'spooky':
@@ -504,6 +539,23 @@ class Character extends FlxSprite
 				antialiasing = false;
 				flipX = true;
 
+			case 'matt-lost':
+				frames = Paths.getSparrowAtlas('matt_lost');
+				animation.addByPrefix('idle', "matt lose retry", 24, false);
+				animation.addByPrefix('firstDeath', "matt lose prev", 24, false);
+				animation.addByPrefix('deathLoop', "matt lose idle", 24, true);
+				animation.addByPrefix('deathConfirm', "matt lose retry", 24, false);
+
+				addOffset('firstDeath', -5, -3);
+				addOffset('deathLoop', 0, 10);
+				addOffset('deathConfirm', 0, 20);
+				playAnim('firstDeath');
+				// pixel bullshit
+				//setGraphicSize(Std.int(width * 6));
+				updateHitbox();
+				antialiasing = true;
+				//flipX = true;
+
 			case 'senpai':
 				frames = Paths.getSparrowAtlas('weeb/senpai');
 				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
@@ -599,7 +651,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (!curCharacter.startsWith('bf') && !curCharacter.startsWith('matt-lost'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -723,6 +775,7 @@ class Character extends FlxSprite
 					{
 						playAnim('idle_s');
 					}
+				case 'matt-lost':
 				default:
 					playAnim('idle');
 			}

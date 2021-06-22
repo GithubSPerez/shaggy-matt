@@ -10,6 +10,7 @@ import flixel.util.FlxTimer;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
+	var matt:Boyfriend;
 	var camFollow:FlxObject;
 
 	var stageSuffix:String = "";
@@ -37,10 +38,23 @@ class GameOverSubstate extends MusicBeatSubstate
 		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 
+		if (daStage == 'stage_2')
+		{
+			matt = new Boyfriend(x, y, 'matt-lost');
+			add(matt);
+			bf.alpha = 0;
+			FlxG.sound.play(Paths.sound('fnf_loss_sfx-pixel'));
+		}
+		else
+		{
+			FlxG.sound.play(Paths.sound('fnf_loss_sfx' + stageSuffix));
+		}
+
+
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
 		add(camFollow);
 
-		FlxG.sound.play(Paths.sound('fnf_loss_sfx' + stageSuffix));
+		
 		Conductor.changeBPM(100);
 
 		// FlxG.camera.followLerp = 1;
@@ -102,6 +116,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
+			if (bf.alpha == 0) matt.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
