@@ -776,6 +776,18 @@ class Character extends FlxSprite
 						playAnim('idle_s');
 					}
 				case 'matt-lost':
+				case 'matt':
+					if (isPlayer)
+					{
+						if (animation.curAnim.finished)
+						{
+							playAnim('idle');
+						}
+					}
+					else
+					{
+						playAnim('idle');
+					}
 				default:
 					playAnim('idle');
 			}

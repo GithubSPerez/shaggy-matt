@@ -248,7 +248,6 @@ class TitleState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
-
 		if (FlxG.keys.justPressed.F)
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
@@ -386,7 +385,7 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
             case 3:
-            	createCoolText(['Mod by', 'perez', 'sulayre', 'theonlyvolume']);
+            	createCoolText(['Mod by', 'perez', 'sulayre', 'theonlyvolume', 'joan atlas']);
             case 10:
             	deleteCoolText();
                 createCoolText(["Using Kade dev engine"]);

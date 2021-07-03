@@ -88,6 +88,8 @@ class ChartingState extends MusicBeatState
 
 	var currType:Int = 0;
 
+	var claps:Array<Note> = [];
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -578,6 +580,21 @@ class ChartingState extends MusicBeatState
 		if (_song.mania == 2) strumLine.x = 220;
 		else strumLine.x = 0;
 
+		curRenderedNotes.forEach(function(note:Note)
+		{
+			if (FlxG.sound.music.playing)
+			{
+				FlxG.overlap(strumLine, note, function(_, _)
+				{
+					if(!claps.contains(note))
+					{
+						claps.push(note);
+						FlxG.sound.play(Paths.sound('SNAP'));
+					}
+				});
+			}
+		});
+
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
 		{
 			trace(curStep);
@@ -686,6 +703,7 @@ class ChartingState extends MusicBeatState
 				{
 					FlxG.sound.music.pause();
 					vocals.pause();
+					claps.splice(0, claps.length);
 				}
 				else
 				{
@@ -706,6 +724,7 @@ class ChartingState extends MusicBeatState
 			{
 				FlxG.sound.music.pause();
 				vocals.pause();
+				claps.splice(0, claps.length);
 
 				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
 				vocals.time = FlxG.sound.music.time;
@@ -717,6 +736,7 @@ class ChartingState extends MusicBeatState
 				{
 					FlxG.sound.music.pause();
 					vocals.pause();
+					claps.splice(0, claps.length);
 
 					var daTime:Float = 700 * FlxG.elapsed;
 

@@ -235,7 +235,7 @@ class PlayState extends MusicBeatState
 		{
 			case 'tutorial':
 				dialogue = ["Hey you're pretty cute.", 'suck my clit or you die.'];
-			case 'place':
+			case 'power-link':
 				//the text to appear;
 				dialogue = [
 					"Hey.",
@@ -250,6 +250,7 @@ class PlayState extends MusicBeatState
 					"I can sense that you've got great singing\nspeed already.",
 					"With this you'll be like, unstoppable!",
 					"Heh",
+					"But first, show me what you've got.",
 					"Let's do this!"
 				];
 				//the sprites to go along with text (n for no change)
@@ -260,10 +261,12 @@ class PlayState extends MusicBeatState
 						"f_sh_smug", "f_sh",
 						"f_matt", "f_matt_down",
 						"f_sh_ser", "f_sh", "f_sh_smug",
-						"f_matt", "f_matt_up"
+						"f_matt",
+						"f_sh_smug",
+						"f_matt_up"
 						];
 				//the sides of the faces (1=left, -1=right and flipped)
-				dside = [-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1];
+				dside = [-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1];
 			case 'revenge':
 				//the text to appear;
 				dialogue = [
@@ -647,7 +650,7 @@ class PlayState extends MusicBeatState
 				add(waveSpriteFG);
 			 */
 		}
-		else if (SONG.song.toLowerCase() == 'place' || SONG.song.toLowerCase() == 'kaio-ken' || SONG.song.toLowerCase() == 'eruption' || SONG.song.toLowerCase() == 'blast' || SONG.song.toLowerCase() == 'whats-new' || SONG.song.toLowerCase() == 'super-saiyan')
+		else if (SONG.song.toLowerCase() == 'power-link' || SONG.song.toLowerCase() == 'kaio-ken' || SONG.song.toLowerCase() == 'eruption' || SONG.song.toLowerCase() == 'blast' || SONG.song.toLowerCase() == 'whats-new' || SONG.song.toLowerCase() == 'super-saiyan')
 		{
 			//dad.powerup = true;
 			defaultCamZoom = 0.9;
@@ -1044,7 +1047,11 @@ class PlayState extends MusicBeatState
 		add(iconP1);
 
 		var icnChar = SONG.player2;
-		if (exDad) icnChar = 'both';
+		if (exDad)
+		{
+			icnChar = 'both';
+			if (Main.god) icnChar = 'senpai';
+		}
 		iconP2 = new HealthIcon(icnChar, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
@@ -1072,7 +1079,7 @@ class PlayState extends MusicBeatState
 				case "tutorial":
 					startCountdown();
 					FlxG.camera.zoom = 1;
-				case "where-are-you" | "place":
+				case "where-are-you" | "power-link":
 					if (!Main.skipDes)
 					{
 						schoolIntro(1);
@@ -1366,7 +1373,7 @@ class PlayState extends MusicBeatState
 									else
 									{
 										if (!startedCountdown) startCountdown();
-										else endSong();
+										else bScreen = true;
 									}
 								}
 								talk = 0;
@@ -2463,18 +2470,18 @@ class PlayState extends MusicBeatState
 			}
 		}
 		//yyyy messi meteee un golazoooooooO!!!!!
-		if (curSong.toLowerCase() == 'where-are-you')
+		if (curSong.toLowerCase() == 'power-link')
 		{
 			switch (curBeat)
 			{
-				case 12:
+				case 400:
 					burst = new FlxSprite(-1110, 0);
-				case 245:
+				case 448:
 					if (burst.y == 0)
 					{
 						FlxG.sound.play(Paths.sound('burst'));
 						remove(burst);
-						burst = new FlxSprite(dad.getMidpoint().x - 1000, dad.getMidpoint().y - 100);
+						burst = new FlxSprite(boyfriend.getMidpoint().x - 600, boyfriend.getMidpoint().y - 300);
 						burst.frames = Paths.getSparrowAtlas('shaggy');
 						burst.animation.addByPrefix('burst', "burst", 30);
 						burst.animation.play('burst');
@@ -2493,7 +2500,7 @@ class PlayState extends MusicBeatState
 					*/
 					// FlxG.sound.music.stop();
 					// FlxG.switchState(new TitleState());
-				case 246:
+				case 450:
 					remove(burst);
 			}
 		}
@@ -2736,7 +2743,49 @@ class PlayState extends MusicBeatState
 				});
 			}
 
+		if (bScreen)
+		{
+			switch (bState)
+			{
+				case 0:
+					cs_black = new FlxSprite(-500, -400).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.BLACK);
+					cs_black.scrollFactor.set();
+					cs_black.alpha = 1;
+					add(cs_black);
 
+					endtxt = new Alphabet(6, FlxG.height / 2 + 380, "THE END", true, false);
+					endtxt.scrollFactor.set();
+					endtxt.screenCenter();
+					//endtxt.x -= 150;
+					add(endtxt);
+
+					bState = 1;
+				case 1:
+					bTime ++;
+					if (bTime >= 240)
+					{
+						if (!FlxG.save.data.showLetter)
+						{
+							thanks = new Alphabet(6, FlxG.height / 2 + 380, "A LETTER ARRIVED IN FREEPLAY", true, false);
+							thanks.scrollFactor.set();
+							thanks.screenCenter();
+							thanks.y += 200;
+							//endtxt.x -= 150;
+							add(thanks);
+							bTime = 0;
+						}
+						bState = 2;
+					}
+				case 2:
+					bTime ++;
+					if (bTime > 400)
+					{
+						endSong();
+						bState = 3;
+					}
+			}
+		}
+		
 		if (!inCutscene)
 			keyShit();
 
@@ -2745,6 +2794,10 @@ class PlayState extends MusicBeatState
 			endSong();
 		#end
 	}
+
+	var bScreen = false;
+	var bState = 0;
+	var bTime = 0;
 
 	function endSong():Void
 	{
@@ -2869,6 +2922,8 @@ class PlayState extends MusicBeatState
 						}
 						finalCutscene();
 					case ('final-destination'):
+						FlxG.save.data.showLetter = true;
+						FlxG.save.flush();
 						csDial('end');
 						schoolIntro(0);
 				}

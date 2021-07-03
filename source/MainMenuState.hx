@@ -44,6 +44,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		Main.god = false;
 		Main.skipDes = false;
 		if (!FlxG.sound.music.playing)
 		{
@@ -150,6 +151,12 @@ class MainMenuState extends MusicBeatState
 			FlxG.save.data.progress = 0;
 			FlxG.save.flush();
 		}
+		if (FlxG.save.data.wii == null)
+		{
+			FlxG.save.data.wii = 0;
+			FlxG.save.data.showLetter = false;
+			FlxG.save.flush();
+		}
 
 		if (FlxG.save.data.dfjk == 1)
 			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
@@ -172,6 +179,10 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 		bgch.angle -= 0.05;
+		if (FlxG.keys.justPressed.F8)
+		{
+			FlxG.fullscreen = !FlxG.fullscreen;
+		}
 
 		if (controls.RIGHT_P) diff ++;
 		if (controls.LEFT_P) diff --;
@@ -265,7 +276,8 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.keys.justPressed.NINE)
 		{
 			FlxG.sound.play(Paths.sound('burst'));
-			FlxG.save.data.progress = 0;
+			FlxG.save.data.wii = 0;
+			FlxG.save.data.showLetter = false;
 			FlxG.save.flush();
 			StoryMenuState.weekUnlocked = [true, true, false, false];
 		}

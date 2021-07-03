@@ -189,7 +189,7 @@ class Note extends FlxSprite
 
 			x += width / 2;
 
-			animation.play(frameN[noteData] + 'holdend');
+			animation.play(frameN[noteData % Main.keyAmmo[mania]] + 'holdend');
 			switch (noteData)
 			{
 				case 0:
