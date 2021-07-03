@@ -2719,10 +2719,13 @@ class PlayState extends MusicBeatState
 								}
 								else
 								{
-									health -= 0.075;
-									vocals.volume = 0;
-									if (theFunne)
-										noteMiss(daNote.noteData);
+									if (daNote.mustPress)
+									{
+										health -= 0.075;
+										vocals.volume = 0;
+										if (theFunne)
+											noteMiss(daNote.noteData);
+									}
 								}
 			
 								daNote.active = false;
@@ -2764,7 +2767,7 @@ class PlayState extends MusicBeatState
 					bTime ++;
 					if (bTime >= 240)
 					{
-						if (!FlxG.save.data.showLetter)
+						if (FlxG.save.data.wii == 0)
 						{
 							thanks = new Alphabet(6, FlxG.height / 2 + 380, "A LETTER ARRIVED IN FREEPLAY", true, false);
 							thanks.scrollFactor.set();
@@ -2932,6 +2935,7 @@ class PlayState extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
+			if (Main.god) FlxG.openURL('https://srperez.itch.io/gyro-pro');
 			FlxG.switchState(new FreeplayState());
 		}
 	}
