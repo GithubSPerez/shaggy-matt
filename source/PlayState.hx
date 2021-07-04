@@ -1503,7 +1503,7 @@ class PlayState extends MusicBeatState
 			c_div = 0.75;
 		}
 
-		if (SONG.song.toLowerCase() == "kaio-ken" || SONG.song.toLowerCase() == "blast")
+		if (SONG.song.toLowerCase() == "revenge")
 		{
 			new FlxTimer().start(0.002, function(cbt:FlxTimer)
 			{
@@ -1562,7 +1562,7 @@ class PlayState extends MusicBeatState
 			});
 		}
 
-		if (SONG.song.toLowerCase() == "god-eater")
+		if (SONG.song.toLowerCase() == "final-destination")
 		{
 			new FlxTimer().start(0.002, function(cbt:FlxTimer)
 			{
@@ -1574,28 +1574,34 @@ class PlayState extends MusicBeatState
 					{
 						cText = ['A', 'S', 'D', 'F', 'S\nP\nA\nC\nE', '1', '2', '3', 'R\nE\nT\nU\nR\nN'];
 					}
-					var nJx = 100;
+					var nJx = 70;
 					for (i in 0...9)
 					{
-						noticeB[i] = new FlxText(0, 0, 0, cText[i], 32);
+						noticeB[i] = new FlxText(0, 0, 0, cText[i], 24);
 						noticeB[i].x = FlxG.width * 0.5 + nJx*i + 55;
 						noticeB[i].y = 20;
 						if (FlxG.save.data.downscroll)
 						{
-							noticeB[i].y = FlxG.height - 120;
+							noticeB[i].y = FlxG.height - 200;
 							switch (i)
 							{
 								case 4:
-									noticeB[i].y -= 160;
+									noticeB[i].y -= 140;
 								case 8:
 									if (FlxG.save.data.dfjk == 2)
-									noticeB[i].y -= 190;
+									noticeB[i].y -= 150;
 							}
+						}
+						else
+						{
+							noticeB[i].y += 70;
 						}
 						noticeB[i].scrollFactor.set();
 						//notice[i].alpha = 0;
+						noticeB[i].x -= 0;
+						
 
-						nShadowB[i] = new FlxText(0, 0, 0, cText[i], 32);
+						nShadowB[i] = new FlxText(0, 0, 0, cText[i], 24);
 						nShadowB[i].x = noticeB[i].x + 4;
 						nShadowB[i].y = noticeB[i].y + 4;
 						nShadowB[i].scrollFactor.set();
