@@ -134,22 +134,10 @@ class Character extends FlxSprite
 				frames = tex;
 				animation.addByPrefix('idle', 'shaggy_idle', 24);
 				animation.addByPrefix('idle2', 'shaggy_idle2', 24);
-				animation.addByPrefix('singUP', 'shaggy_up', 20);
-				animation.addByPrefix('singRIGHT', 'shaggy_right', 20);
-				animation.addByPrefix('singDOWN', 'shaggy_down', 24);
-				animation.addByPrefix('singLEFT', 'shaggy_left', 24);
-				animation.addByPrefix('catch', 'shaggy_catch', 30);
-				animation.addByPrefix('hold', 'shaggy_hold', 30);
-				animation.addByPrefix('h_half', 'shaggy_h_half', 30);
-				animation.addByPrefix('fall', 'shaggy_fall', 30);
-				animation.addByPrefix('kneel', 'shaggy_half_ground', 30);
-
-				animation.addByPrefix('power', 'shaggy_powerup', 30);
-				animation.addByPrefix('idle_s', 'shaggy_super_idle', 24);
-				animation.addByPrefix('singUP_s', 'shaggy_sup2', 20);
-				animation.addByPrefix('singRIGHT_s', 'shaggy_sright', 20);
-				animation.addByPrefix('singDOWN_s', 'shaggy_sdown', 24);
-				animation.addByPrefix('singLEFT_s', 'shaggy_sleft', 24);
+				animation.addByPrefix('singUP', 'shaggy_up', 30);
+				animation.addByPrefix('singRIGHT', 'shaggy_right', 30);
+				animation.addByPrefix('singDOWN', 'shaggy_down', 30);
+				animation.addByPrefix('singLEFT', 'shaggy_left', 30);
 
 				addOffset('idle');
 				addOffset('idle2');
@@ -157,18 +145,6 @@ class Character extends FlxSprite
 				addOffset("singRIGHT", -20, -40);
 				addOffset("singLEFT", 100, -120);
 				addOffset("singDOWN", 0, -170);
-				addOffset("catch", 140, 90);
-				addOffset("hold", 90, 100);
-				addOffset("h_half", 90, 0);
-				addOffset("fall", 130, 0);
-				addOffset("kneel", 110, -123);
-
-				addOffset('idle_s');
-				addOffset('power', 10, 0);
-				addOffset("singUP_s", -6, 0);
-				addOffset("singRIGHT_s", -20, -40);
-				addOffset("singLEFT_s", 100, -120);
-				addOffset("singDOWN_s", 0, -170);
 
 				if (Main.god)
 				{
@@ -226,40 +202,47 @@ class Character extends FlxSprite
 			case 'matt':
 				tex = Paths.getSparrowAtlas('matt');
 				if (Main.god) tex = Paths.getSparrowAtlas('god_matt');
-
+				
 				frames = tex;
 
-				animation.addByPrefix('idle', "matt idle", 20, false);
-				animation.addByPrefix('singUP', "matt up note", 24, false);
-				animation.addByPrefix('singDOWN', "matt down note", 24, false);
-				animation.addByPrefix('singLEFT', 'matt left note', 24, false);
-				animation.addByPrefix('singRIGHT', 'matt right note', 24, false);
+				animation.addByPrefix('idle', "matt idle", 24, false);
+				animation.addByPrefix('singUP', "matt up new", 24, false);
+				animation.addByPrefix('singDOWN', "matt down new", 24, false);
+				animation.addByPrefix('singLEFT', 'matt left new', 24, false);
+				animation.addByPrefix('singRIGHT', 'matt right new', 24, false);
 
-				animation.addByPrefix('singUPmiss', "miss up", 24, false);
-				animation.addByPrefix('singDOWNmiss', "miss down", 24, false);
-				animation.addByPrefix('singLEFTmiss', 'miss left', 24, false);
-				animation.addByPrefix('singRIGHTmiss', 'miss right', 24, false);
+				animation.addByPrefix('singUPmiss', "matt up miss", 24, false);
+				animation.addByPrefix('singDOWNmiss', "matt down miss", 24, false);
+				animation.addByPrefix('singLEFTmiss', 'matt left miss', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'matt right miss', 24, false);
 
-				addOffset('idle');
-				addOffset("singUP", -41, 21);
-				addOffset("singRIGHT", -10, -14);
-				addOffset("singLEFT", 63, -24);
-				addOffset("singDOWN", -62, -19);
+				addOffset('idle', 0, 70);
+
+				addOffset("singUP", -5, 80);
+				addOffset("singRIGHT", -47, 18);
+				addOffset("singLEFT", 180, 19);
+				addOffset("singDOWN", 64, -20);
 
 				if (isPlayer)
 				{
-					addOffset("singUP", -21, 21);
-					addOffset("singRIGHT", -40, -14);
-					addOffset("singLEFT", 63, -24);
-					addOffset("singDOWN", -30, -19);
+					addOffset("singUP", 15, 80);
+					addOffset("singLEFT", 139, 21);
+					addOffset("singRIGHT", -52, 27);
+					addOffset("singDOWN", 87, -16);
 				}
-				addOffset("singUPmiss", -21, 21);
-				addOffset("singRIGHTmiss", -40, -14);
-				addOffset("singLEFTmiss", 63, -24);
-				addOffset("singDOWNmiss", -15, -28);
+				addOffset("singUPmiss", 8, 80);
+				addOffset("singLEFTmiss", 153, 26);
+				addOffset("singRIGHTmiss", -23, 23);
+				addOffset("singDOWNmiss", 75, -14);
 
 				if (Main.god)
 				{
+					animation.addByPrefix('singUP', "matt up note", 24, false);
+					animation.addByPrefix('singDOWN', "matt down note", 24, false);
+					animation.addByPrefix('singLEFT', 'matt left note', 24, false);
+					animation.addByPrefix('singRIGHT', 'matt right note', 24, false);
+					
+					addOffset('idle', 0, 0);
 					addOffset("singUP", -105, 136);
 					addOffset("singRIGHT", -133, -51);
 					addOffset("singLEFT", 86, -23);
@@ -542,13 +525,13 @@ class Character extends FlxSprite
 			case 'matt-lost':
 				frames = Paths.getSparrowAtlas('matt_lost');
 				animation.addByPrefix('idle', "matt lose retry", 24, false);
-				animation.addByPrefix('firstDeath', "matt lose prev", 24, false);
-				animation.addByPrefix('deathLoop', "matt lose idle", 24, true);
+				animation.addByPrefix('firstDeath', "matt lose start", 30, false);
+				animation.addByPrefix('deathLoop', "matt lose loop", 24, true);
 				animation.addByPrefix('deathConfirm', "matt lose retry", 24, false);
 
-				addOffset('firstDeath', -5, -3);
-				addOffset('deathLoop', 0, 10);
-				addOffset('deathConfirm', 0, 20);
+				addOffset('firstDeath', 20, 0 /*literally penis*/);
+				addOffset('deathLoop', -4, 10 - 20);
+				addOffset('deathConfirm', 30 - 4, 20 - 20);
 				playAnim('firstDeath');
 				// pixel bullshit
 				//setGraphicSize(Std.int(width * 6));
